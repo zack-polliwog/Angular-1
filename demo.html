@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="node_modules/_angular@1.5.8@angular/angular.js"></script>
+    <script>
+        var App = angular.module("app", []);
+        //1.service方法
+        App.service("DateUtils", ["$filter", function ($filter) {
+            //我们可以在DateUtils中添加很多方法
+            this.getCurrentTime = function () {
+                var date = new Date();
+                return $filter("date")(date, "yyyy-MM-dd HH:mm:ss");
+            };
+            //也可以自定义传入的数据
+            this.getCurrentTimes = function(formatter) {
+                var date = new Date();
+                return $filter("date")(date, formatter);
+            }
+        }]);
+        //2.factory方法(工厂模式)，返回的是一个对象
+        App.factory("Game", function(){
+            return {
+                //添加一个属性
+                name: "Dota",
+                //添加一个方法
+                reverse: function(str){
+                    return str.split("").reverse().join("");
+                }
+            }
+        });
+        //3.value方法 定义常量
+        App.value("author", "张三");
+        App.value("age", 22);
+        App.controller("appController", ["$scope", "DateUtils", "Game", "author", "age", function ($scope, DateUtils, Game, author, age) {
+            //控制在view中显示 调用DateUtils服务
+            console.log(DateUtils.getCurrentTime());
+            console.log(DateUtils.getCurrentTimes("yyyy-MM-dd HH:mm:ss"));
+            console.log(Game);
+            console.log(Game.name);
+            console.log(Game.reverse("!doolb tsrif"))
+            console.log(author);
+            console.log(age);
+        }]);
+    </script>
+</head>
+
+<body ng-app="app" ng-controller="appController">
+
+</body>
+
+</html>
